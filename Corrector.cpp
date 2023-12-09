@@ -186,11 +186,84 @@ void	ListaCandidatas		(
 	int &	iNumSugeridas)						//Numero de elementos en la lista
 ******************************************************************************************************************/
 void	ClonaPalabras(
-	char *	szPalabraLeida,						// Palabra a clonar
-	char	szPalabrasSugeridas[][TAMTOKEN], 	//Lista de palabras clonadas
-	int &	iNumSugeridas)						//Numero de elementos en la lista
+	char* szPalabraLeida,						// Palabra a clonar
+	char  szPalabrasSugeridas[][TAMTOKEN], 	    //Lista de palabras clonadas
+	int& iNumSugeridas)						    //Numero de elementos en la lista
 {
-	//Sustituya estas lineas por su código
-	strcpy(szPalabrasSugeridas[0], szPalabraLeida); //lo que sea que se capture, es sugerencia
-	iNumSugeridas = 1;							//Una sola palabra sugerida
+	char abc[36] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'á', 'é', 'í', 'ó', 'ú' };
+	char aux[TAMTOKEN]; iNumSugeridas = 0;
+	int k, j, i, contador;
+
+
+	strcpy_s(aux, szPalabraLeida);
+	for (int i = 0; i < strlen(szPalabraLeida); i++) {
+
+		for (int j = 0; j < 32; j++) {
+			aux[i] = abc[j];
+			strcpy_s(szPalabrasSugeridas[iNumSugeridas++], aux);
+		} aux[i] = szPalabraLeida[i];
+	}
+
+
+	for (k = 1; k < strlen(szPalabraLeida) + 1; k++) {
+		aux[k] = szPalabraLeida[k - 1];
+
+
+	} aux[k] = '\0';
+
+	for (i = 0; i < strlen(szPalabraLeida) + 1; i++) {
+
+		for (j = 0; j < 36; j++) {
+			aux[i] = abc[j];
+
+			strcpy_s(szPalabrasSugeridas[iNumSugeridas++], aux);
+		}
+		aux[i] = szPalabraLeida[i];
+	}
+
+	contador = 0;
+	for (i = 0; i < strlen(szPalabraLeida) && strlen(szPalabraLeida) != 1; i++) {
+
+		for (j = 0; j < strlen(szPalabraLeida); j++) {
+			if (j != i)
+				aux[contador++] = szPalabraLeida[j];
+
+
+		} aux[contador] = '\0';
+
+
+		strcpy_s(szPalabrasSugeridas[iNumSugeridas++], aux);
+
+
+		strcpy_s(aux, szPalabraLeida);
+
+		contador = 0;
+	}
+
+	for (i = 0; i < strlen(szPalabraLeida) - 1; i++) {
+		aux[i] = szPalabraLeida[i + 1];
+		aux[i + 1] = szPalabraLeida[i];
+
+
+		strcpy_s(szPalabrasSugeridas[iNumSugeridas++], aux);
+
+		strcpy_s(aux, szPalabraLeida);
+	}
+	strcpy_s(szPalabrasSugeridas[iNumSugeridas++], szPalabraLeida);
+
+
+
+	for (j = 0; j < iNumSugeridas - 1; j++) {
+
+		for (i = j + 1; i < iNumSugeridas; i++) {
+
+			if (strcmp(szPalabrasSugeridas[j], szPalabrasSugeridas[i]) > 0) {
+				strcpy_s(aux, szPalabrasSugeridas[j]);
+				strcpy_s(szPalabrasSugeridas[j], szPalabrasSugeridas[i]);
+				strcpy_s(szPalabrasSugeridas[i], aux);
+			}
+		}
+	}
+
+
 }
