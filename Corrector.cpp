@@ -23,11 +23,13 @@
 	int		iEstadisticas[]			:	Arreglo con el numero de veces que aparecen las palabras en el diccionario
 	int &	iNumElementos			:	Numero de elementos en el diccionario
 ******************************************************************************************************************/
-void	Diccionario(char* szNombre, char szPalabras[][TAMTOKEN], int iEstadisticas[], int& iNumElementos)
+void	Diccionario			(char *szNombre, char szPalabras[][TAMTOKEN], int iEstadisticas[], int &iNumElementos)
 {
 	FILE* fpDicc;
 	char linea[4000];
+	char palabraDetectada[TAMTOKEN];
 	int i;
+	int indicePD;
 	iNumElementos = 0;
 	// abrir el achivo
 	if (DEPURAR == 1)
@@ -36,10 +38,11 @@ void	Diccionario(char* szNombre, char szPalabras[][TAMTOKEN], int iEstadisticas[
 	fopen_s(&fpDicc, szNombre, "r");
 	if (fpDicc != NULL)
 	{
-
+		
 		if (DEPURAR == 1)
 			printf("\nSi lo pude abrir");
 
+		indicePD = 0;
 		while (!feof(fpDicc))
 		{
 			fgets(linea, sizeof(linea), fpDicc);
@@ -47,16 +50,33 @@ void	Diccionario(char* szNombre, char szPalabras[][TAMTOKEN], int iEstadisticas[
 				printf("\n%s\n", linea);
 			for (i = 0; i < strlen(linea); i++)
 			{
-				if (linea[i] != ',')
-					if (DEPURAR == 1)
-						printf("%c", linea[i]);
+
+				// Detectar una palabra
 				if (linea[i] == ' ')
+				{
+					palabraDetectada[indicePD] = '\0';
+					strcpy_s(szPalabras[iNumElementos], TAMTOKEN, palabraDetectada);
+					iEstadisticas[iNumElementos] = 1;
+					if (DEPURAR == 1)
+						//printf("\np: %s", palabraDetectada);
+					indicePD = 0;
 					iNumElementos++;
+					// eliminar los espacios en blanco
+					// tabuladores y saltos de linea consecutivos				
+			    }
+				else
+				{
+					if (linea[i] != '(' && linea[i] != ')')
+					{
+						palabraDetectada[indicePD] = linea[i];
+						indicePD++;
+					}
+				}
 			}
 			if (DEPURAR == 1)
 				printf("\nNumPalabras: %i\n", iNumElementos);
 
-
+			// burbujazo
 
 		}
 
@@ -67,14 +87,6 @@ void	Diccionario(char* szNombre, char szPalabras[][TAMTOKEN], int iEstadisticas[
 		if (DEPURAR == 1)
 			printf("\nNo lo pude abrir");
 	}
-
-
-
-
-	//Sustituya estas lineas por su código
-	iNumElementos = 1;
-	strcpy(szPalabras[0], "AquiVaElDiccionario");
-	iEstadisticas[0] = 1; // la primer palabra aparece solo una vez.
 }
 /*****************************************************************************************************************
 	ListaCandidatas: Esta funcion recupera desde el diccionario las palabras validas y su peso
