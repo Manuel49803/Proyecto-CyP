@@ -1,0 +1,9 @@
+﻿  Corrector.cpp
+C:\Users\princ\Downloads\quisodecirAlumnosVisual2022\quisodecirAlumnos\quisodecir\Corrector.cpp(80,22): warning C4244: '=': conversión de 'wint_t' a 'char'; posible pérdida de datos
+  (compilando archivo de origen "/Corrector.cpp")
+  
+C:\Users\princ\Downloads\quisodecirAlumnosVisual2022\quisodecirAlumnos\quisodecir\Corrector.cpp(38,6): warning C4101: 'esta': variable local sin referencia
+  (compilando archivo de origen "/Corrector.cpp")
+  
+  LINK : no se encontró C:\Users\princ\Downloads\quisodecirAlumnosVisual2022\quisodecirAlumnos\x64\Debug\quisodecir.exe o no lo generó el último vínculo incremental; ejecutando vínculo completo
+  quisodecir.vcxproj -> C:\Users\princ\Downloads\quisodecirAlumnosVisual2022\quisodecirAlumnos\x64\Debug\quisodecir.exe
