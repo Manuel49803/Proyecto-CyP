@@ -113,6 +113,40 @@ void	Diccionario(char* szNombre, char szPalabras[][TAMTOKEN], int iEstadisticas[
 				}
 
 
+			for (int i = 1; i < iNumElementos; i++)
+			{
+				if (strcmp(szPalabras[i - 1], szPalabras[i]) != 0)
+				{
+					j++;
+					// Copiar palabra y estadística si no es duplicada
+					strcpy_s(szPalabras[j], TAMTOKEN, szPalabras[i]);
+					iEstadisticas[j] = iEstadisticas[i];
+				}
+				else
+				{
+					// Fusionar estadísticas si es duplicada
+					iEstadisticas[j] += iEstadisticas[i];
+				}
+			}
+
+			// Actualizar el número de elementos después de eliminar duplicados
+			iNumElementos = j + 1;
+
+			if (DEPURAR == 1)
+				printf("\n%i\n", iNumElementos);
+
+		}
+		fclose(fpDicc);
+	}
+	else
+	{
+		if (DEPURAR == 1)
+			printf("\nNo lo pude abrir");
+	}
+
+
+
+
 
 }
 /*****************************************************************************************************************
