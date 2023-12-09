@@ -23,13 +23,19 @@
 	int		iEstadisticas[]			:	Arreglo con el numero de veces que aparecen las palabras en el diccionario
 	int &	iNumElementos			:	Numero de elementos en el diccionario
 ******************************************************************************************************************/
-void	Diccionario			(char *szNombre, char szPalabras[][TAMTOKEN], int iEstadisticas[], int &iNumElementos)
+void	Diccionario(char* szNombre, char szPalabras[][TAMTOKEN], int iEstadisticas[], int& iNumElementos)
 {
 	FILE* fpDicc;
-	char linea[4000];
+	char linea[10000];
+	char mayu;
 	char palabraDetectada[TAMTOKEN];
 	int i;
 	int indicePD;
+	int pasada, comp;
+	char aux[TAMTOKEN];
+	int aux2;
+	int conta, p = 0, j = 0;
+	int esta;
 	iNumElementos = 0;
 	// abrir el achivo
 	if (DEPURAR == 1)
@@ -38,7 +44,7 @@ void	Diccionario			(char *szNombre, char szPalabras[][TAMTOKEN], int iEstadistic
 	fopen_s(&fpDicc, szNombre, "r");
 	if (fpDicc != NULL)
 	{
-		
+
 		if (DEPURAR == 1)
 			printf("\nSi lo pude abrir");
 
@@ -46,47 +52,68 @@ void	Diccionario			(char *szNombre, char szPalabras[][TAMTOKEN], int iEstadistic
 		while (!feof(fpDicc))
 		{
 			fgets(linea, sizeof(linea), fpDicc);
-			if (DEPURAR == 1)
-				printf("\n%s\n", linea);
+
+
 			for (i = 0; i < strlen(linea); i++)
 			{
-
 				// Detectar una palabra
-				if (linea[i] == ' ')
+				if (linea[i] == ' ' || linea[i] == '\t')
 				{
-					palabraDetectada[indicePD] = '\0';
-					strcpy_s(szPalabras[iNumElementos], TAMTOKEN, palabraDetectada);
-					iEstadisticas[iNumElementos] = 1;
-					if (DEPURAR == 1)
-						//printf("\np: %s", palabraDetectada);
-					indicePD = 0;
-					iNumElementos++;
-					// eliminar los espacios en blanco
-					// tabuladores y saltos de linea consecutivos				
-			    }
+					if (linea[i + 1] != ' ' && linea[i + 1] != '\t')
+					{
+
+						palabraDetectada[indicePD] = '\0';
+						strcpy_s(szPalabras[iNumElementos], TAMTOKEN, palabraDetectada);
+						iEstadisticas[iNumElementos] = 1;
+						if (DEPURAR == 1)
+							indicePD = 0;
+						iNumElementos++;
+						// eliminar los espacios en blanco
+						// tabuladores y saltos de linea consecutivos
+
+					}
+				}
 				else
 				{
-					if (linea[i] != '(' && linea[i] != ')')
+					if (linea[i] != '(' && linea[i] != ')' && linea[i] != ',' && linea[i] != '.')
 					{
-						palabraDetectada[indicePD] = linea[i];
+						mayu = towlower(linea[i]);
+						palabraDetectada[indicePD] = mayu;
 						indicePD++;
 					}
 				}
 			}
-			if (DEPURAR == 1)
-				printf("\nNumPalabras: %i\n", iNumElementos);
+
+
+
 
 			// burbujazo
+			if (DEPURAR == 1)
 
-		}
+				for (pasada = 0; pasada < iNumElementos - 1; pasada++) {
+					conta = 0;
+					for (comp = 0; comp < iNumElementos - 1; comp++) {
 
-		fclose(fpDicc);
-	}
-	else
-	{
-		if (DEPURAR == 1)
-			printf("\nNo lo pude abrir");
-	}
+						if (DEPURAR == 1)
+
+							if (strcmp(szPalabras[comp], szPalabras[comp + 1]) == 1)
+							{
+
+								strcpy_s(aux, TAMTOKEN, szPalabras[comp]);
+								strcpy_s(szPalabras[comp], TAMTOKEN, szPalabras[comp + 1]);
+								strcpy_s(szPalabras[comp + 1], TAMTOKEN, aux);
+
+								aux2 = iEstadisticas[comp];
+								iEstadisticas[comp] = iEstadisticas[comp + 1];
+								iEstadisticas[comp + 1] = aux2;
+
+
+							}
+					}
+				}
+
+
+
 }
 /*****************************************************************************************************************
 	ListaCandidatas: Esta funcion recupera desde el diccionario las palabras validas y su peso
